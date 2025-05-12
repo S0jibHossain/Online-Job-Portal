@@ -1,0 +1,104 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Job Listings</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+            background-color: #f8f9fa;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            margin-bottom: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+        input, select, button {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            width: 250px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .job-card {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        .job-card h3 {
+            color: #007bff;
+            font-size: 1.25rem;
+        }
+        .job-card a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-block;
+            margin-top: 10px;
+            transition: color 0.2s ease;
+        }
+        .job-card a:hover {
+            color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Available Jobs</h1>
+
+<form method="get">
+    <input type="text" name="title" placeholder="Job Title" value="{{ request.GET.title }}">
+    <input type="text" name="location" placeholder="Location" value="{{ request.GET.location }}">
+    <select name="job_type">
+        <option value="">Any Type</option>
+        <option value="Full Time" {% if request.GET.job_type == "Full Time" %}selected{% endif %}>Full Time</option>
+        <option value="Part Time" {% if request.GET.job_type == "Part Time" %}selected{% endif %}>Part Time</option>
+    </select>
+    <input type="number" name="min_salary" placeholder="Min Salary" value="{{ request.GET.min_salary }}">
+    <input type="number" name="max_salary" placeholder="Max Salary" value="{{ request.GET.max_salary }}">
+    <button type="submit">Search</button>
+</form>
+
+{% if jobs %}
+    {% for job in jobs %}
+        <div class="job-card">
+            <h3>{{ job.title }}</h3>
+            <p><strong>Type:</strong> {{ job.job_type }}</p>
+            <p><strong>Location:</strong> {{ job.job_location }}</p>
+            <p><strong>Pay:</strong> {{ job.pay }} / {{ job.pay_mode }}</p>
+            <p><strong>Posted:</strong> {{ job.date_time_posted|date:"F j, Y" }}</p>
+            <a href="{% url 'job_details' job.pk %}">View Details</a>
+        </div>
+    {% endfor %}
+{% else %}
+    <p>No jobs found matching your criteria.</p>
+{% endif %}
+
+</body>
+</html>

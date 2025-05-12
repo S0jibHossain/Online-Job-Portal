@@ -1,0 +1,72 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ job.title }} - Job Details</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 30px;
+            background-color: #f4f4f4;
+        }
+        .job-container {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        h1 {
+            margin-top: 0;
+        }
+        .job-meta {
+            margin-bottom: 20px;
+            color: #555;
+        }
+        .apply-form {
+            margin-top: 30px;
+        }
+        button {
+            padding: 10px 20px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+
+<div class="job-container">
+    <h1>{{ job.title }}</h1>
+    <div class="job-meta">
+        <p><strong>Company:</strong> {{ job.user.name }}</p>
+        <p><strong>Location:</strong> {{ job.job_location }}</p>
+        <p><strong>Type:</strong> {{ job.job_type }}</p>
+        <p><strong>Category:</strong> {{ job.job_cat }}</p>
+        <p><strong>Salary:</strong> {{ job.pay }} / {{ job.pay_mode }}</p>
+        <p><strong>Hours/Week:</strong> {{ job.house_per_week }}</p>
+        <p><strong>Posted:</strong> {{ job.date_time_posted|date:"F j, Y" }}</p>
+        <p><strong>Expires:</strong> {{ job.expiry_date }}</p>
+    </div>
+    <div class="job-description">
+        <h3>Description</h3>
+        <p>{{ job.job_description }}</p>
+    </div>
+
+    <div class="apply-form">
+        <form method="post" action="{% url 'apply_for_job' job.pk %}">
+            {% csrf_token %}
+            <button type="submit">Apply</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

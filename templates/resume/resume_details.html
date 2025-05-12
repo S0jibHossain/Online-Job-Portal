@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container my-5">
+    <div class="row shadow p-4 rounded bg-white">
+        <!-- LEFT SIDEBAR -->
+        <div class="col-md-4 border-end">
+            <h3 class="mb-3">{{ resume.user.get_full_name }}</h3>
+            <p><strong>Gender:</strong> {{ resume.gender }}</p>
+            <p><strong>Age:</strong> {{ resume.age }}</p>
+            <p><strong>Location:</strong> {{ resume.state }}, {{ resume.country }}</p>
+            <p><strong>Language:</strong> {{ resume.language }}</p>
+            <p><strong>Experience:</strong> {{ resume.experience }} years</p>
+            <p><strong>Education Level:</strong> {{ resume.educational_level }}</p>
+            <p><strong>Twitter:</strong> <a href="{{ resume.twitter }}" target="_blank">{{ resume.twitter }}</a></p>
+            <p><strong>LinkedIn:</strong> <a href="{{ resume.linkedin }}" target="_blank">{{ resume.linkedin }}</a></p>
+
+            <a href="{% url 'update_resume' resume.pk %}" class="btn btn-outline-primary mt-4 w-100">Edit Resume</a>
+        </div>
+
+        <!-- RIGHT CONTENT -->
+        <div class="col-md-8 ps-md-4">
+            <!-- About Section -->
+            <section class="mb-4">
+                <h4 class="border-bottom pb-2">About Me</h4>
+                <p>{{ resume.about_candidate }}</p>
+            </section>
+
+            <!-- Education Section -->
+            <section class="mb-4">
+                <h4 class="border-bottom pb-2">Education</h4>
+                {% for edu in education %}
+                    <div class="mb-3">
+                        <h5>{{ edu.degree_type }} in {{ edu.course }}</h5>
+                        <small class="text-muted">{{ edu.start_year }} -
+                            {% if edu.still_schooling_here == 'Yes' %}Present{% else %}{{ edu.end_year }}{% endif %}
+                        </small>
+                        <p>{{ edu.description }}</p>
+                    </div>
+                {% empty %}
+                    <p>No education details added.</p>
+                {% endfor %}
+            </section>
+
+            <!-- Work Experience Section -->
+            <section>
+                <h4 class="border-bottom pb-2">Work Experience</h4>
+                {% for work in work %}
+                    <div class="mb-3">
+                        <h5>{{ work.role }} at {{ work.company_name }}</h5>
+                        <small class="text-muted">{{ work.start_year }} -
+                            {% if work.still_working_here == 'Yes' %}Present{% else %}{{ work.end_year }}{% endif %}
+                        </small>
+                        <p>{{ work.description }}</p>
+                    </div>
+                {% empty %}
+                    <p>No work experience added.</p>
+                {% endfor %}
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}

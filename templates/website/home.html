@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="bg-white">
+
+ <!-- Hero Section with Background and Search -->
+<section class="relative bg-cover bg-center bg-no-repeat min-h-screen flex items-center justify-center" style="background-image: url('{% static 'images/Homepage.jpg' %}');">
+  <div class="absolute inset-0 bg-black opacity-50"></div> <!-- Overlay -->
+
+  <div class="relative max-w-6xl mx-auto px-6 text-white text-center">
+    <h1 class="text-4xl md:text-5xl font-extrabold mb-4">Find Your Job</h1>
+    <p class="text-gray-200 mb-6 max-w-2xl mx-auto text-lg">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+    </p>
+
+    <!-- Search Form -->
+    <form method="GET" action="{% url 'job_list' %}" class="mt-8 flex flex-col sm:flex-row gap-4 justify-center max-w-3xl mx-auto">
+      <input type="text" name="keyword" placeholder="Job title or keyword" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none text-black" />
+      <input type="text" name="location" placeholder="Location" class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none text-black" />
+      <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700">Search</button>
+    </form>
+  </div>
+</section>
+
+
+  <!-- Quick Actions -->
+  <section class="bg-gray-100 py-12">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center max-w-5xl mx-auto">
+      <div class="p-6 bg-white rounded-xl shadow">
+        <h3 class="text-xl font-semibold mb-2">Browse Jobs</h3>
+        <p class="mb-4">Explore listings by category, location, or company.</p>
+        <a href="{% url 'job_list' %}" class="text-indigo-600 font-semibold">Browse</a>
+      </div>
+      <div class="p-6 bg-white rounded-xl shadow">
+        <h3 class="text-xl font-semibold mb-2">Post a Job</h3>
+        <p class="mb-4">Looking for talent? Post a job and connect with candidates.</p>
+        <a href="{% url 'create_job' %}" class="text-indigo-600 font-semibold">Post Now</a>
+      </div>
+      <div class="p-6 bg-white rounded-xl shadow">
+        <h3 class="text-xl font-semibold mb-2">Upload Resume</h3>
+        <p class="mb-4">Get noticed by top employers. Upload your resume today.</p>
+        <a href="{% url 'add_resume' %}" class="text-indigo-600 font-semibold">Upload</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="p-8 max-w-3xl mx-auto text-center">
+    <h2 class="text-2xl font-bold mb-4">Why Use Our Portal?</h2>
+    <p class="text-gray-700 leading-relaxed">
+      We connect job seekers and recruiters quickly, easily, and effectively. Whether you're looking for your next career move or the perfect candidate, our job portal has the tools and support to help you succeed.
+    </p>
+  </section>
+</div>
+{% endblock %}

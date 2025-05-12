@@ -1,0 +1,155 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recruiter Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .sidebar {
+            min-height: 100vh;
+            background: #212529;
+            color: #fff;
+        }
+        .sidebar .nav-link {
+            color: #adb5bd;
+        }
+        .sidebar .nav-link.active, .sidebar .nav-link:hover {
+            color: #fff;
+            background: #343a40;
+        }
+        .dashboard-header {
+            background: #fff;
+            border-bottom: 1px solid #dee2e6;
+            padding: 1.5rem 2rem;
+        }
+        .stat-card {
+            border-radius: 0.75rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            background: #fff;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .profile-img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-2 d-none d-md-block sidebar py-4">
+            <div class="text-center mb-4">
+                {% if profile_image_url %}
+                    <img src="{{ profile_image_url }}" class="profile-img" alt="Profile">
+                {% else %}
+                    <img src="{% static 'images/profile_placeholder.png' %}" class="profile-img" alt="Profile">
+                {% endif %}
+                <h5 class="mt-2">{{ recruiter_name }}</h5>
+                {% if has_company %}
+                    <small>{{ company_name }}</small>
+                {% else %}
+                    <small>New Company Needed</small>
+                {% endif %}
+            </div>
+            <ul class="nav flex-column">
+                <li class="nav-item mb-2">
+                    <a class="nav-link active" href="#">Dashboard</a>
+                </li>
+
+                {% if has_company.pk %}
+                    <li class="nav-item mb-2">
+                     <a class="nav-link" href="{% url 'company_details' company.pk %}">View Company Profile</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item mb-2">
+                        <a class="nav-link" href="{% url 'add_company' %}">Create Company Profile</a>
+                    </li>
+                {% endif %}
+                    <li class="nav-item mb-2">
+                        <a class="nav-link" href="{% url 'create_job' %}">Post a Job</a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a class="nav-link" href="{% url 'job_list' %}">My Jobs</a>
+                    </li>
+                    <li class="nav-item mb-2">
+                        <a class="nav-link" href="{% url 'view_applications' %}">View Applications</a>
+                    </li>
+                <li class="nav-item mt-4">
+                    <a class="nav-link text-danger" href="{% url 'logout' %}">Logout</a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="col-md-10 ms-sm-auto px-md-4">
+            <div class="dashboard-header d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 class="mb-0">Welcome, {{ recruiter_name }}!</h2>
+                    <span class="text-muted">Here's an overview of your activity</span>
+                </div>
+                <div>
+                    <a href="{% url 'create_job' %}" class="btn btn-primary">Post New Job</a>
+                </div>
+            </div>
+
+            {% if has_company %}
+                <div class="row mt-4 g-4">
+                    <div class="col-md-4">
+                        <div class="stat-card">
+                            <h5>Jobs Posted</h5>
+                            <h2>{{ jobs_posted }}</h2>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stat-card">
+                            <h5>Applications Received</h5>
+                            <h2>{{ applications_received }}</h2>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stat-card">
+                            <h5>Company Rating</h5>
+                            <h2>{{ company_rating }} <span class="text-warning">&#9733;</span></h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-5">
+                    <div class="col-12">
+                        <div class="card p-4">
+                            <h4>Recent Activity</h4>
+                            <ul class="list-group list-group-flush mt-3">
+                                {% for activity in recent_activity %}
+                                    <li class="list-group-item">{{ activity }}</li>
+                                {% empty %}
+                                    <li class="list-group-item text-muted">No recent activity.</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div id="create-company">
+                    <h4>Create your company profile</h4>
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-primary">Create Company</button>
+                    </form>
+                </div>
+            {% endif %}
+        </main>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

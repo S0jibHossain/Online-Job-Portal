@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0 rounded-3">
+                <div class="card-header text-left">
+                    <h3 class="mb-0">📝 Add Your Resume</h3>
+                </div>
+                <div class="card-body p-5">
+                    <form method="POST">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <div class="mb-4">
+                                <label class="form-label fw-bold text-dark">{{ field.label_tag }}</label>
+                                <div class="input-group">
+                                    {{ field }}
+                                </div>
+                                {% if field.help_text %}
+                                    <div class="form-text text-muted">{{ field.help_text }}</div>
+                                {% endif %}
+                                {% for error in field.errors %}
+                                    <div class="text-danger small">{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                        <div class="d-grid mt-4">
+                            <button type="submit" class="btn btn-success btn-lg shadow-sm hover-shadow">
+                                <i class="bi bi-upload"></i> Submit Resume
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-center">
+                    Make your profile stand out with a strong resume 💼
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+<style>
+    body {
+        background-color: #f4f4f4;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .card {
+        background: white;
+        border-radius: 12px;
+        padding: 40px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        border: none;
+    }
+
+    .card-header {
+        background: none;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 10px;
+    }
+
+    .card-header h3 {
+        color: #0d3c61;
+        font-weight: 700;
+        font-size: 1.8rem;
+        margin: 0;
+    }
+
+    .card-body {
+        background-color: #ffffff;
+        padding-top: 30px;
+    }
+
+    .card-footer {
+        background: none;
+        font-size: 0.85rem;
+        color: #999;
+        padding-top: 10px;
+    }
+
+    .form-label {
+        font-weight: 600;
+        font-size: 1rem;
+        color: #333;
+    }
+
+    .input-group input,
+    .input-group textarea,
+    .input-group select {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        width: 100%;
+    }
+
+    .btn-success {
+        background-color: #2a9d8f;
+        border: none;
+        font-weight: bold;
+        letter-spacing: 0.5px;
+    }
+
+    .btn-success:hover {
+        background-color: #21867a;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .hover-shadow:hover {
+        box-shadow: none;
+    }
+
+    .text-muted {
+        font-style: italic;
+    }
+
+    .mb-4 {
+        margin-bottom: 2rem;
+    }
+
+    .d-grid {
+        display: grid;
+    }
+</style>

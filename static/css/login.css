@@ -1,0 +1,29 @@
+body, html {
+    height: 100%;
+    margin: 0;
+}
+.login-container {
+    height: 100vh;
+    display: flex;
+}
+.left-side {
+    width: 50%;
+    background: url('/static/images/login.jpg') no-repeat center center;
+    background-size: cover;
+    background-color: blue;
+}
+.right-side {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 50px;
+    background-color: white;
+    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+}
+.form-control {
+    height: 45px;
+}
+.login-alert {
+    display: block;
+}

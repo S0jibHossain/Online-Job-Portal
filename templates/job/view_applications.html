@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5 d-flex justify-content-center">
+    <div class="w-100">
+        <h2 class="mb-4 text-primary fw-bold text-center">Job Applications</h2>
+
+        <!-- Filter Form -->
+        <form method="get" class="row g-3 mb-5 justify-content-center">
+            <div class="col-md-4">
+                <input type="text" name="title" class="form-control shadow-sm" placeholder="Filter by Job Title" value="{{ title_filter }}">
+            </div>
+            <div class="col-md-4">
+                <select name="status" class="form-select shadow-sm">
+                   <option value="pending" {% if status_filter == 'pending' %}selected{% endif %}>Pending</option>
+                <option value="shortlisted" {% if status_filter == 'shortlisted' %}selected{% endif %}>Shortlisted</option>
+                <option value="rejected" {% if status_filter == 'rejected' %}selected{% endif %}>Rejected</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100 shadow-sm">Filter</button>
+            </div>
+        </form>
+
+        <!-- Applications Table -->
+        <div class="table-responsive shadow-sm">
+            <table class="table table-bordered table-hover align-middle bg-white rounded-3 text-center">
+                <thead class="table-primary">
+                    <tr>
+                        <th scope="col">Candidate</th>
+                        <th scope="col">Job Title</th>
+                        <th scope="col">Resume</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for app in applications %}
+                    <tr>
+                        <td class="fw-semibold">{{ app.user.get_full_name }}</td>
+                        <td>{{ app.job.title }}</td>
+                        <td>
+                            <a href="{% url 'resume_details' app.user.pk %}" class="btn btn-sm btn-outline-info">
+                                View Resume
+                            </a>
+                        </td>
+                        <td>
+                            {% if app.status == "pending" %}
+                                <span class="badge bg-warning text-dark">Pending</span>
+                            {% elif app.status == "shortlisted" %}
+                                <span class="badge bg-success">Shortlisted</span>
+                            {% elif app.status == "rejected" %}
+                                <span class="badge bg-danger">Rejected</span>
+                            {% else %}
+                                <span class="badge bg-secondary">{{ app.status|title }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if app.status == "pending" %}
+                                <form method="post" action="{% url 'accept_application' app.pk %}" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-success btn-sm">Accept</button>
+                                </form>
+                                <form method="post" action="{% url 'reject_application' app.pk %}" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                                </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-muted">No applications found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
